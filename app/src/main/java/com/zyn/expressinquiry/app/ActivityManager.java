@@ -6,28 +6,16 @@ import java.util.LinkedList;
 
 /**
  * Desc: 管理Activity
+ *  单例设计说明：
+ *      http://wuchong.me/blog/2014/08/28/how-to-correctly-write-singleton-pattern/
  * CreateDate: 2017/7/3 13:31
  * Author: Created by ZengYinan
  * Email: 498338021@qq.com
  */
 
-public class ActivityManager {
+public enum  ActivityManager {
+    INSTANCE;
     private LinkedList<Activity> mActivityList = new LinkedList<Activity>();
-    private static ActivityManager instance;
-
-    private ActivityManager() {
-    }
-
-    public static ActivityManager getInstance() {
-        if (null == instance) {
-            synchronized (ActivityManager.class) {
-                if (null == instance) {
-                    instance = new ActivityManager();
-                }
-            }
-        }
-        return instance;
-    }
 
     // 添加Activity到容器中
     public void addActivity(Activity activity) {

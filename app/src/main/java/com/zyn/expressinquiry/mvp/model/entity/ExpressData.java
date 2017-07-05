@@ -149,5 +149,23 @@ public class ExpressData {
         public void setContext(String context) {
             this.context = context;
         }
+
+    }
+
+    @Override
+    public String toString() {
+        return "ExpressData{" +
+                "mailNo='" + mailNo + '\'' +
+                ", update=" + update +
+                ", updateStr='" + updateStr + '\'' +
+                ", ret_code=" + ret_code +
+                ", flag=" + flag +
+                ", dataSize=" + dataSize +
+                ", status=" + status +
+                ", tel='" + tel + '\'' +
+                ", expSpellName='" + expSpellName + '\'' +
+                ", expTextName='" + expTextName + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

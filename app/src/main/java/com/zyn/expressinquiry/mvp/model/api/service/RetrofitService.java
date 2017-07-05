@@ -1,23 +1,31 @@
 package com.zyn.expressinquiry.mvp.model.api.service;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import android.support.annotation.NonNull;
+
 import com.orhanobut.logger.Logger;
 import com.zyn.expressinquiry.mvp.model.api.Api;
 import com.zyn.expressinquiry.mvp.model.entity.BaseResponseData;
 import com.zyn.expressinquiry.mvp.model.entity.ExpressData;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.Buffer;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -53,21 +61,29 @@ public class RetrofitService {
         mApi = retrofit.create(Api.class);
     }
 
-    //自定义拦截器，打印请求地址和返回json
+    //自定义拦截器，打印请求地址
+    //注意！！！此处不能使用response.body.string获取返回的json数据，会导致关闭错误
     private static final Interceptor loggingInterceptor = new Interceptor() {
         @Override
         public Response intercept(Chain chain) throws IOException {
             final Request request = chain.request();
+
             Logger.t("RetrofitService").d(request.url());
 
             final Response response = chain.proceed(request);
-            Logger.t("RetrofitService").d(response.body().string()+"---------------");
 
             return response;
         }
     };
 
+
     /*--------------------------------- API ---------------------------------*/
+
+    /**
+     * 获取查询的物流信息
+     * @param map
+     * @return
+     */
     public static Observable<BaseResponseData<ExpressData>> getExpressData(Map<String, String> map){
         return mApi.searchExpress(map)
                 .subscribeOn(Schedulers.io())

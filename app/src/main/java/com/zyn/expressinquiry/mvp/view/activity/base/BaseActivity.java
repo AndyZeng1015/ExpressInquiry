@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.zyn.expressinquiry.app.ActivityManager;
 
+import butterknife.ButterKnife;
+
 /**
  * Desc: Activity的基类
  * CreateDate: 2017/7/3 16:52
@@ -17,14 +19,15 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
         //将本Activity加入到LinkedList集合中
-        ActivityManager.getInstance().addActivity(this);
+        ActivityManager.INSTANCE.addActivity(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //当本Activity被销毁时，从LinkedList集合中移除
-        ActivityManager.getInstance().removeActivity(this);
+        ActivityManager.INSTANCE.removeActivity(this);
     }
 }

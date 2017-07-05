@@ -35,4 +35,13 @@ public class BaseResponseData<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "BaseResponseData{" +
+                "showapi_res_code=" + showapi_res_code +
+                ", showapi_res_error='" + showapi_res_error + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

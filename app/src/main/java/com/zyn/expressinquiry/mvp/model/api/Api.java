@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
- * Desc:
+ * Desc: Api接口
  * CreateDate: 2017/6/28 23:11
  * Author: Created by ZengYinan
  * Email: 498338021@qq.com
