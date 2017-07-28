@@ -1,5 +1,7 @@
 package com.zyn.expressinquiry.di.module;
 
+import android.content.Context;
+
 import com.zyn.expressinquiry.mvp.contract.MainContract;
 import com.zyn.expressinquiry.mvp.presenter.MainPresenter;
 
@@ -14,8 +16,15 @@ import dagger.Provides;
  */
 @Module
 public class MainViewModule {
+
+    private MainContract.IMainView mIMainView;
+
+    public MainViewModule(MainContract.IMainView mainView){
+        this.mIMainView = mainView;
+    }
+
     @Provides
     MainContract.IMainPresenter providerMainPresenter(){
-        return new MainPresenter();
+        return new MainPresenter(mIMainView);
     }
 }

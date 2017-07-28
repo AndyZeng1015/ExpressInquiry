@@ -2,6 +2,7 @@ package com.zyn.expressinquiry.mvp.model.api.service;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.zyn.expressinquiry.mvp.model.api.Api;
 import com.zyn.expressinquiry.mvp.model.entity.BaseResponseData;
@@ -71,6 +72,10 @@ public class RetrofitService {
             Logger.t("RetrofitService").d(request.url());
 
             final Response response = chain.proceed(request);
+
+//            BaseResponseData<ExpressData> data = new Gson().fromJson(response.body().string(), BaseResponseData.class);
+
+            //Logger.t("RetrofitService").d(data.toString());
 
             return response;
         }

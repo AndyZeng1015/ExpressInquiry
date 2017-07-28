@@ -1,10 +1,5 @@
 package com.zyn.expressinquiry.mvp.presenter;
 
-import android.os.SystemClock;
-import android.provider.Settings;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.orhanobut.logger.Logger;
 import com.zyn.expressinquiry.mvp.contract.MainContract;
 import com.zyn.expressinquiry.mvp.model.api.service.RetrofitService;
@@ -12,12 +7,9 @@ import com.zyn.expressinquiry.mvp.model.entity.BaseResponseData;
 import com.zyn.expressinquiry.mvp.model.entity.ExpressData;
 import com.zyn.expressinquiry.utils.DateUtils;
 
-import org.reactivestreams.Subscriber;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -31,11 +23,15 @@ import io.reactivex.disposables.Disposable;
 
 public class MainPresenter implements MainContract.IMainPresenter {
 
-    public MainPresenter(){
+    MainContract.IMainView mIMainView;
+
+    public MainPresenter(MainContract.IMainView mainView){
+        this.mIMainView = mainView;
     }
 
     @Override
     public void loadData(String searchData) {
+        mIMainView.showLoadingView();
         Map<String, String> map = new HashMap<String, String>();
         map.put("com", "auto");
         map.put("nu", searchData);
@@ -52,17 +48,18 @@ public class MainPresenter implements MainContract.IMainPresenter {
 
                     @Override
                     public void onNext(@NonNull BaseResponseData<ExpressData> expressDataBaseResponseData) {
-                        Logger.t("MainPresenter").d(expressDataBaseResponseData.toString());
+                        mIMainView.setData(expressDataBaseResponseData);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Logger.t("MainPresenter").d(e.getMessage());
+                        e.printStackTrace();
+                        mIMainView.hideLoadingView();
                     }
 
                     @Override
                     public void onComplete() {
-                        Logger.t("MainPresenter").d("onComplete");
+                        mIMainView.hideLoadingView();
                     }
                 });
     }
