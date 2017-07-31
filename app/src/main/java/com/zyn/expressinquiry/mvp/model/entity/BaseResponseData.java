@@ -10,7 +10,7 @@ package com.zyn.expressinquiry.mvp.model.entity;
 public class BaseResponseData<T> {
     private int showapi_res_code;//返回码
     private String showapi_res_error;//错误信息
-    private T data;//包含信息
+    private T showapi_res_body;//包含信息
 
     public int getShowapi_res_code() {
         return showapi_res_code;
@@ -28,12 +28,11 @@ public class BaseResponseData<T> {
         this.showapi_res_error = showapi_res_error;
     }
 
-    public T getData() {
-        return data;
+    public T getShowapi_res_body() {
+        return showapi_res_body;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setShowapi_res_body(T showapi_res_body) {
+        this.showapi_res_body = showapi_res_body;
     }
-
 }

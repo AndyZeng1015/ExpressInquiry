@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,6 +59,26 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
         super.onCreate(savedInstanceState);
         initData();
         initDagger();
+        initListener();
+    }
+
+    private void initListener() {
+        //下拉刷新
+        mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mIMainPresenter.loadDataByRefresh(mEtContent.getText().toString().trim());
+            }
+        });
+
+        //点击扫描
+        mIvScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     private void initData(){
@@ -91,14 +112,25 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
     }
 
     @Override
+    public void hideRefreshView(){
+        if(mSrlRefresh.isRefreshing()){
+            mSrlRefresh.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void setData(BaseResponseData<ExpressData> data) {
         mDataBeanList.clear();
         if(data.getShowapi_res_code() != 0){
             //失败
             Toast.makeText(MainActivity.this, data.getShowapi_res_error(), Toast.LENGTH_SHORT).show();
         }else{
-            Logger.t("ZYN").e(data.getData().getExpTextName());
-            mDataBeanList.addAll(data.getData().getData());
+            if(data.getShowapi_res_body().getRet_code() != 0 || data.getShowapi_res_body().getMsg() != null){
+                //失败
+                Toast.makeText(MainActivity.this, data.getShowapi_res_body().getMsg(), Toast.LENGTH_SHORT).show();
+            }else{
+                mDataBeanList.addAll(data.getShowapi_res_body().getData());
+            }
         }
         mSearchResultAdapter.notifyDataSetChanged();
     }

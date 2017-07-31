@@ -14,11 +14,16 @@ public interface MainContract {
     public interface IMainView{
         void showLoadingView();//显示加载框
         void hideLoadingView();//隐藏加载框
+
+        void hideRefreshView();
+
         void setData(BaseResponseData<ExpressData> data);//返回数据
     }
 
     public interface IMainPresenter{
         void loadData(String searchData);//加载数据
+
+        void loadDataByRefresh(String searchData);//下拉刷新数据
     }
 
 }

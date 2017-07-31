@@ -33,6 +33,16 @@ public class ExpressData {
     private int dataSize;
     private int status;
     private String tel;
+    private String msg;
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     private String expSpellName;
     private String expTextName;
     private List<DataBean> data;

@@ -52,19 +52,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     public class SearchResultViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_date)
         TextView tvDate;
-        @BindView(R.id.tv_content)
         TextView tvContent;
 
         public SearchResultViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            tvDate = (TextView) itemView.findViewById(R.id.tv_date);
+            tvContent = (TextView) itemView.findViewById(R.id.tv_content);
         }
 
         public void setData(ExpressData.DataBean dataBean) {
-            tvDate.setText(dataBean.getTime());
-            tvContent.setText(dataBean.getContext());
+            tvDate.setText(dataBean.getTime()+"");
+            tvContent.setText(dataBean.getContext()+"");
         }
     }
 

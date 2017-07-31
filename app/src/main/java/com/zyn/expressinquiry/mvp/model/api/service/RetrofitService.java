@@ -1,7 +1,5 @@
 package com.zyn.expressinquiry.mvp.model.api.service;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.zyn.expressinquiry.mvp.model.api.Api;
@@ -9,22 +7,16 @@ import com.zyn.expressinquiry.mvp.model.entity.BaseResponseData;
 import com.zyn.expressinquiry.mvp.model.entity.ExpressData;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -75,7 +67,7 @@ public class RetrofitService {
 
 //            BaseResponseData<ExpressData> data = new Gson().fromJson(response.body().string(), BaseResponseData.class);
 
-            //Logger.t("RetrofitService").d(data.toString());
+//            Logger.t("RetrofitService").d(response.body().string());
 
             return response;
         }
