@@ -1,7 +1,10 @@
 package com.zyn.expressinquiry.mvp.view.activity;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
-import com.squareup.haha.perflib.Main;
 import com.zyn.expressinquiry.R;
 import com.zyn.expressinquiry.di.component.DaggerMainViewComponent;
 import com.zyn.expressinquiry.di.module.MainViewModule;
@@ -22,6 +23,8 @@ import com.zyn.expressinquiry.mvp.model.entity.ExpressData;
 import com.zyn.expressinquiry.mvp.view.activity.base.BaseActivity;
 import com.zyn.expressinquiry.mvp.view.adapter.SearchResultAdapter;
 import com.zyn.expressinquiry.mvp.view.widget.LoadingDialog;
+import com.zyn.scancodelib.CommonScanActivity;
+import com.zyn.scancodelib.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +32,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class MainActivity extends BaseActivity implements MainContract.IMainView {
 
 
+    private static final int SCANNER_CODE = 1;
     @Inject
     MainContract.IMainPresenter mIMainPresenter;
     @BindView(R.id.et_content)
@@ -75,10 +81,23 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
         mIvScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MainActivityPermissionsDispatcher.startActionWithCheck(MainActivity.this);
             }
         });
 
+    }
+
+    @NeedsPermission(Manifest.permission.CAMERA)
+    public void startAction() {
+        Intent intent = new Intent(MainActivity.this, CommonScanActivity.class);
+        intent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
+        startActivityForResult(intent, SCANNER_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     private void initData(){
@@ -138,5 +157,19 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
     @OnClick(R.id.btn_search)
     public void onViewClicked() {
         mIMainPresenter.loadData(mEtContent.getText().toString().trim());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null){
+            switch (requestCode){
+                case SCANNER_CODE:
+                    mEtContent.setText(data.getStringExtra("data"));
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
